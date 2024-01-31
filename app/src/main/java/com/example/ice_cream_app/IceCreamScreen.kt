@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -53,7 +54,7 @@ fun IceCreamScreen(
 
     Scaffold(
         topBar = {
-            IceCreamTopAppBar()
+            IceCreamTopAppBar(context)
         }
     ) { innerPadding ->
         Column(
@@ -62,7 +63,7 @@ fun IceCreamScreen(
             IceCreamTypeField(iceCreamUiState, iceCreamViewModel, focusManager, context)
             Image(painter = painterResource(id = R.drawable.ice_cream), contentDescription = null)
             IceCreamQuantity(iceCreamUiState, iceCreamViewModel, context)
-            IceCreamPrice(iceCreamUiState)
+            IceCreamPrice(iceCreamUiState, context)
 
         }
     }
@@ -70,11 +71,11 @@ fun IceCreamScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun IceCreamTopAppBar(modifier: Modifier = Modifier) {
+fun IceCreamTopAppBar(context: Context) {
     CenterAlignedTopAppBar(
         title = {
             Text(
-                "IceCream Order",
+                context.getString(R.string.app_bar_text),
                 color = Color.White,
                 style = MaterialTheme.typography.displaySmall
             )
@@ -101,7 +102,10 @@ fun IceCreamTypeField(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        Text(text = "Type:", style = MaterialTheme.typography.headlineMedium)
+        Text(
+            text = context.getString(R.string.type_text),
+            style = MaterialTheme.typography.headlineMedium
+        )
         OutlinedTextField(
             value = iceCreamUiState.type,
             onValueChange = {
@@ -109,7 +113,7 @@ fun IceCreamTypeField(
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Done // Set the keyboard action to "Done"
+                imeAction = ImeAction.Done
             ),
             keyboardActions = KeyboardActions(
                 onDone = {
@@ -117,7 +121,7 @@ fun IceCreamTypeField(
                     focusManager.clearFocus()
                 }
             ),
-            label = { Text("Cone or Cup") },
+            label = { Text(context.getString(R.string.cone_or_cup)) },
             textStyle = TextStyle(fontSize = 20.sp)
         )
     }
@@ -145,31 +149,39 @@ fun IceCreamQuantity(
     ) {
         Button(onClick = {
             if (!iceCreamUiState.isCorrectType) {
-                Toast.makeText(context, "Invalid Ice-cream Type", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.invalid_type),
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
                 iceCreamViewModel.decreaseQuantity()
             }
         }) {
-            Text(text = "-")
+            Text(text = context.getString(R.string.sub_quantity))
         }
         OutlinedTextField(
-//            value = TextFieldValue(
-//                text = iceCreamUiState.quantity.toString(),
-//                selection = TextRange(iceCreamUiState.quantity.toString().length)
-//            ),
             value = iceCreamUiState.quantity.toString(),
             onValueChange = {
                 val newValue = it.toIntOrNull() ?: 0
                 val clampedValue = newValue.coerceIn(-999999, 999999)
                 if (!iceCreamUiState.isCorrectType) {
-                    Toast.makeText(context, "Invalid Ice-cream Type", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.invalid_type),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 } else if (newValue < 0) {
-                    Toast.makeText(context, "Invalid Quantity", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.invalid_quantity),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 } else {
                     iceCreamViewModel.setQuantity(clampedValue)
                 }
             },
-            label = { Text("Quantity") },
+            label = { Text(context.getString(R.string.quantity_text)) },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done
@@ -179,18 +191,26 @@ fun IceCreamQuantity(
         )
         Button(onClick = {
             if (!iceCreamUiState.isCorrectType) {
-                Toast.makeText(context, "Invalid Ice-cream Type", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.invalid_type),
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
                 iceCreamViewModel.increaseQuantity()
             }
         }) {
-            Text(text = "+")
+            Text(text = context.getString(R.string.add_quantity))
         }
     }
 }
 
 @Composable
-fun IceCreamPrice(iceCreamUiState: IceCreamUIState, modifier: Modifier = Modifier) {
+fun IceCreamPrice(
+    iceCreamUiState: IceCreamUIState,
+    context: Context,
+    modifier: Modifier = Modifier
+) {
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -198,7 +218,10 @@ fun IceCreamPrice(iceCreamUiState: IceCreamUIState, modifier: Modifier = Modifie
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        Text(text = "Total Price : ", style = MaterialTheme.typography.headlineMedium)
+        Text(
+            text = context.getString(R.string.price_text),
+            style = MaterialTheme.typography.headlineMedium
+        )
         Text(
             text = "$${iceCreamUiState.totalPrice}",
             style = MaterialTheme.typography.headlineMedium
