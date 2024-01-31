@@ -80,7 +80,6 @@ fun IceCreamScreen(
 ) {
     val iceCreamUiState by iceCreamViewModel.uiState.collectAsState()
     val context = LocalContext.current
-    val focusManager = LocalFocusManager.current
 
     Scaffold(
         topBar = {
