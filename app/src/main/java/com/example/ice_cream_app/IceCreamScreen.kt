@@ -4,10 +4,13 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -30,7 +33,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -61,7 +63,15 @@ fun IceCreamScreen(
             modifier = modifier.padding(innerPadding)
         ) {
             IceCreamTypeField(iceCreamUiState, iceCreamViewModel, focusManager, context)
-            Image(painter = painterResource(id = R.drawable.ice_cream), contentDescription = null)
+            Box(modifier = Modifier.fillMaxWidth()) {
+                Image(
+                    painter = painterResource(id = R.drawable.ice_cream),
+                    contentDescription = null,
+                    modifier = modifier
+                        .size(400.dp)
+                        .align(Alignment.Center)
+                )
+            }
             IceCreamQuantity(iceCreamUiState, iceCreamViewModel, context)
             IceCreamPrice(iceCreamUiState, context)
 
