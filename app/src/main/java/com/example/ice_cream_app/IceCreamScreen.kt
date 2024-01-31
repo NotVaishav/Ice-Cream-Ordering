@@ -84,7 +84,7 @@ fun IceCreamScreen(
 
     Scaffold(
         topBar = {
-            IceCreamTopAppBar()
+            IceCreamTopAppBar(context)
         }
     ) { innerPadding ->
         Column(
@@ -97,18 +97,18 @@ fun IceCreamScreen(
             IceCreamFlavoursDropDown(iceCreamUiState, iceCreamViewModel)
             Image(painter = painterResource(id = R.drawable.ice_cream), contentDescription = null)
             IceCreamQuantity(iceCreamUiState, iceCreamViewModel, context)
-            IceCreamPrice(iceCreamUiState)
+            IceCreamPrice(iceCreamUiState, context)
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun IceCreamTopAppBar(modifier: Modifier = Modifier) {
+fun IceCreamTopAppBar(context: Context) {
     CenterAlignedTopAppBar(
         title = {
             Text(
-                "IceCream Order",
+                context.getString(R.string.app_bar_text),
                 color = Color.White,
                 style = MaterialTheme.typography.displaySmall
             )
@@ -135,7 +135,10 @@ fun IceCreamTypeField(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        Text(text = "Type:", style = MaterialTheme.typography.headlineMedium)
+        Text(
+            text = context.getString(R.string.type_text),
+            style = MaterialTheme.typography.headlineMedium
+        )
         OutlinedTextField(
             value = iceCreamUiState.type,
             onValueChange = {
@@ -143,7 +146,7 @@ fun IceCreamTypeField(
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Done // Set the keyboard action to "Done"
+                imeAction = ImeAction.Done
             ),
             keyboardActions = KeyboardActions(
                 onDone = {
@@ -151,7 +154,7 @@ fun IceCreamTypeField(
                     focusManager.clearFocus()
                 }
             ),
-            label = { Text("Cone or Cup") },
+            label = { Text(context.getString(R.string.cone_or_cup)) },
             textStyle = TextStyle(fontSize = 20.sp)
         )
     }
@@ -179,12 +182,16 @@ fun IceCreamQuantity(
     ) {
         Button(onClick = {
             if (!iceCreamUiState.isCorrectType) {
-                Toast.makeText(context, "Invalid Ice-cream Type", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.invalid_type),
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
                 iceCreamViewModel.decreaseQuantity()
             }
         }) {
-            Text(text = "-")
+            Text(text = context.getString(R.string.sub_quantity))
         }
         OutlinedTextField(
             value = TextFieldValue(
@@ -195,12 +202,16 @@ fun IceCreamQuantity(
                 val newValue = it.text.toIntOrNull() ?: 0
                 val clampedValue = newValue.coerceIn(0, 999999)
                 if (!iceCreamUiState.isCorrectType) {
-                    Toast.makeText(context, "Invalid Ice-cream Type", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.invalid_type),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 } else {
                     iceCreamViewModel.setQuantity(clampedValue)
                 }
             },
-            label = { Text("Quantity") },
+            label = { Text(context.getString(R.string.quantity_text)) },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done
@@ -210,18 +221,26 @@ fun IceCreamQuantity(
         )
         Button(onClick = {
             if (!iceCreamUiState.isCorrectType) {
-                Toast.makeText(context, "Invalid Ice-cream Type", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.invalid_type),
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
                 iceCreamViewModel.increaseQuantity()
             }
         }) {
-            Text(text = "+")
+            Text(text = context.getString(R.string.add_quantity))
         }
     }
 }
 
 @Composable
-fun IceCreamPrice(iceCreamUiState: IceCreamUIState, modifier: Modifier = Modifier) {
+fun IceCreamPrice(
+    iceCreamUiState: IceCreamUIState,
+    context: Context,
+    modifier: Modifier = Modifier
+) {
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -229,7 +248,10 @@ fun IceCreamPrice(iceCreamUiState: IceCreamUIState, modifier: Modifier = Modifie
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        Text(text = "Total Price : ", style = MaterialTheme.typography.headlineMedium)
+        Text(
+            text = context.getString(R.string.price_text),
+            style = MaterialTheme.typography.headlineMedium
+        )
         Text(
             text = "$${iceCreamUiState.totalPrice}",
             style = MaterialTheme.typography.headlineMedium

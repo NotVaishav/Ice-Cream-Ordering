@@ -7,4 +7,13 @@
     <string name="flavour_3">Strawberry</string>
     <string name="flavour_4">Pistachio</string>
     <string name="flavour_5">Cotton Candy</string>
+    <string name="invalid_type">Invalid Ice-cream Type</string>
+    <string name="invalid_quantity">Invalid Quantity</string>
+    <string name="price_text">Total Price : </string>
+    <string name="quantity_text">Quantity</string>
+    <string name="type_text">Type:</string>
+    <string name="cone_or_cup">Cone or Cup</string>
+    <string name="add_quantity">+</string>
+    <string name="sub_quantity">-</string>
+    <string name="app_bar_text">IceCream Order</string>
 </resources>
