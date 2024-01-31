@@ -12,8 +12,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -60,10 +62,14 @@ fun IceCreamScreen(
         }
     ) { innerPadding ->
         Column(
-            modifier = modifier.padding(innerPadding)
+            modifier = modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.SpaceEvenly
         ) {
             IceCreamTypeField(iceCreamUiState, iceCreamViewModel, focusManager, context)
-            Box(modifier = Modifier.fillMaxWidth()) {
+            Box(modifier = Modifier.fillMaxSize()) {
                 Image(
                     painter = painterResource(id = R.drawable.ice_cream),
                     contentDescription = null,
