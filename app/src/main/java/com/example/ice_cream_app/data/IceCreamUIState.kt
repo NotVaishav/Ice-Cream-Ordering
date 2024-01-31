@@ -5,5 +5,7 @@ data class IceCreamUIState(
     val totalPrice: Double = 0.0,
     val isCorrectType: Boolean = true,
     val type: String = "Cone",
-    val iceCreamType: IceCreamType = IceCreamItems[0]
+    val iceCreamType: IceCreamType = IceCreamItems[0],
+    var expanded: Boolean = false,
+    var selectedFlavourIndex : Int = 0
 )

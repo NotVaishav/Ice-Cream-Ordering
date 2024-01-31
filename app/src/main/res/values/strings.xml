@@ -2,4 +2,9 @@
     <string name="app_name">Ice-Cream-App</string>
     <string name="cone">Cone</string>
     <string name="cup">Cup</string>
+    <string name="flavour_1">Vanilla</string>
+    <string name="flavour_2">Chocolate</string>
+    <string name="flavour_3">Strawberry</string>
+    <string name="flavour_4">Pistachio</string>
+    <string name="flavour_5">Cotton Candy</string>
 </resources>
