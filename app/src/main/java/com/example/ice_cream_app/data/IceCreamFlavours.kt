@@ -10,10 +10,10 @@ data class IceCreamFlavour(
 )
 
 val iceCreamFlavours = listOf(
-    IceCreamFlavour(R.string.flavour_1, 1.00),
-    IceCreamFlavour(R.string.flavour_2, 2.00),
+    IceCreamFlavour(R.string.flavour_1, 0.00),
+    IceCreamFlavour(R.string.flavour_2, 1.00),
     IceCreamFlavour(R.string.flavour_3, 2.00),
-    IceCreamFlavour(R.string.flavour_4, 2.00),
-    IceCreamFlavour(R.string.flavour_5, 2.00),
+    IceCreamFlavour(R.string.flavour_4, 4.00),
+    IceCreamFlavour(R.string.flavour_5, 5.00),
 )
 

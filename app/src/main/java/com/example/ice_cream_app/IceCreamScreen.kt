@@ -1,15 +1,9 @@
 package com.example.ice_cream_app
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,8 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
@@ -27,7 +19,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -45,13 +36,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -93,7 +82,7 @@ fun IceCreamScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             IceCreamTypeRadioButton(iceCreamViewModel)
-            IceCreamFlavoursDropDown(iceCreamUiState, iceCreamViewModel)
+            IceCreamFlavoursDropDown(iceCreamUiState, iceCreamViewModel, context)
             Image(painter = painterResource(id = R.drawable.ice_cream), contentDescription = null)
             IceCreamQuantity(iceCreamUiState, iceCreamViewModel, context)
             IceCreamPrice(iceCreamUiState, context)
@@ -116,52 +105,6 @@ fun IceCreamTopAppBar(context: Context) {
             containerColor = MaterialTheme.colorScheme.primary
         ),
     )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun IceCreamTypeField(
-    iceCreamUiState: IceCreamUIState,
-    iceCreamViewModel: IceCreamViewModel,
-    focusManager: FocusManager,
-    context: Context,
-    modifier: Modifier = Modifier,
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = 20.dp, horizontal = 10.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceEvenly
-    ) {
-        Text(
-            text = context.getString(R.string.type_text),
-            style = MaterialTheme.typography.headlineMedium
-        )
-        OutlinedTextField(
-            value = iceCreamUiState.type,
-            onValueChange = {
-                iceCreamViewModel.setType(it)
-            },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Done
-            ),
-            keyboardActions = KeyboardActions(
-                onDone = {
-                    iceCreamViewModel.checkType()
-                    focusManager.clearFocus()
-                }
-            ),
-            label = { Text(context.getString(R.string.cone_or_cup)) },
-            textStyle = TextStyle(fontSize = 20.sp)
-        )
-    }
-    LaunchedEffect(iceCreamUiState.isCorrectType) {
-        if (!iceCreamUiState.isCorrectType) {
-            Toast.makeText(context, "Invalid ice-cream type", Toast.LENGTH_SHORT).show()
-        }
-    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -314,6 +257,7 @@ fun IceCreamTypeRadioButton(
 fun IceCreamFlavoursDropDown(
     iceCreamUIState: IceCreamUIState,
     iceCreamViewModel: IceCreamViewModel,
+    context: Context,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -344,10 +288,20 @@ fun IceCreamFlavoursDropDown(
                 iceCreamFlavours.forEachIndexed { index, item ->
                     DropdownMenuItem(
                         text = {
-                            Text(
-                                text = stringResource(id = item.flavour),
-                                fontWeight = if (index == iceCreamUIState.selectedFlavourIndex) FontWeight.Bold else null
-                            )
+                            Row(
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                modifier = modifier.fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = context.getString(item.flavour),
+                                    fontWeight = if (index == iceCreamUIState.selectedFlavourIndex) FontWeight.Bold else null
+                                )
+                                if (item.price > 0) {
+                                    Text(text = "+ $${item.price}")
+                                }
+
+                            }
+
                         },
                         onClick = {
                             iceCreamViewModel.updateFlavourIndex(index)
@@ -358,7 +312,6 @@ fun IceCreamFlavoursDropDown(
             }
         }
     }
-
 }
 
 @Preview(showBackground = true)
